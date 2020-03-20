@@ -1,9 +1,20 @@
 import requests
 import urllib.request
 from bs4 import BeautifulSoup
-import time
+from time import time
 
 Soup = ''
+
+column_heads = {"Country Other": "country", 
+            "TotalCases": "totalcases",
+            "NewCases": "newcases", 
+            "TotalDeaths": "totaldeaths", 
+            "NewDeaths": "newdeaths",
+            "TotalRecovered": "recovered",
+            "ActiveCases": "activecases",
+            "Serious Critical": "seriouscases",
+            "Tot\u00a0Cases/1M pop": "total_per_one_million"
+}
 
 attributes = [
     {'top' : 'Currently Infected Patients',
@@ -16,7 +27,7 @@ attributes = [
 
 ]
 
-countries = {
+countries_ids = {
     1: 'italy',
     2:'china', 
     3:'iran',
@@ -33,11 +44,11 @@ web_url = "https://www.worldometers.info/coronavirus/"
 
 
 def get_data(country_id):
-    global Soup, Last_Time
+    global Soup
 
-    url = web_url + "country/" + countries[country_id]
+    url = web_url + "country/" + countries_ids[country_id]
+
     response = requests.get(url).text
-    Last_Time = time.time()
     soup = BeautifulSoup(response, "html.parser")
     bSoup = soup.select("div[class='content-inner']")[0]
 
@@ -78,27 +89,27 @@ def get_data(country_id):
             attributes[i]['left'] : left_head            
         }
 
-    Data['country'] = countries[country_id]
+    Data['country'] = countries_ids[country_id]
     return Data
 
 def get_table():
-    global Soup, Last_Time
-
+    global Soup
     url = web_url 
-    response = requests.get(url).text
+    response = requests.get(url , headers={'Connection':'close'})
+    response=response.text
     soup = BeautifulSoup(response, "html.parser")
     Soup = soup.select("table[id='main_table_countries_today']")[0]
-
     #scraping the 1st 3 numbers: Cases, deaths and recovered
     head = Soup.select("th")
-    head = {j : i.text.replace(',', ' ') for j,i  in enumerate(head)}
+
+    head = [i.text.replace(',', ' ') for i  in head]
 
     rows = Soup.select("tbody tr")
-
     table = dict()
     for i in range(len(rows)):
         country_row = rows[i]
-        columns = [i.text.strip() for i in country_row.select('td')]
+        columns = [i.text.strip() or '0' for i in country_row.select('td')]
 
-        table[columns[0].lower().replace(':','')] = {head[j]:columns[j] for j in range(len(columns))}
+
+        table[columns[0].lower().replace(':','')] = {column_heads[head[j]]:columns[j] for j in range(len(columns))}
     return table

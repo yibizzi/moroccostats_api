@@ -24,7 +24,7 @@ SECRET_KEY = '9rw8ol$o)f_8@ehe)mau%7lsuotn9gz%1))ls-*@d-=5glqr3g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = ['moroccostats.herokuapp.com']
+ALLOWED_HOSTS = ['moroccostats.herokuapp.com', 'localhost', '127.0.0.1']
 
 #DEBUG = True
 #ALLOWED_HOSTS = []
@@ -33,7 +33,6 @@ ALLOWED_HOSTS = ['moroccostats.herokuapp.com']
 # Application definition
 
 INSTALLED_APPS = [
-    'polls.apps.PollsConfig',
     'stats.apps.StatsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
