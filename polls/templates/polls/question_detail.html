@@ -1,0 +1,12 @@
+<h1>{{question.question_text}}</h1>
+
+{% if choices %}
+
+    <ul>
+    {% for choix in choices %}
+        <li><a href="/polls/{{ question.id }}/">{{ choix.choice_text }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No choices are available.</p>
+{% endif %}
