@@ -2,7 +2,7 @@ import requests
 import urllib.request
 from bs4 import BeautifulSoup
 from time import time
-import re
+import re, sys
 
 Soup = ''
 
@@ -116,29 +116,25 @@ def get_table():
     return table
 
 
-def get_regions_morocco():
+def get_regions_morocco(heads):
     
-
+    
 
 
     url = 'http://www.covidmaroc.ma/'
-    heads = {
-        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-        'referrer': 'https://google.co.ma',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Pragma': 'no-cache',
-        'Connection':'close',
-    }
-    response = requests.get(url , headers=heads)
     
+    response = requests.get(url , headers=heads)
+    err =  {'error': str(response)}
     print('headers: \n' + str(response.headers))
+    sys.stdout.flush()
+    
     response=response.text
     soup = BeautifulSoup(response, "html.parser").select("table")
     try:
         Soup = soup[0]
     except:
-        return {'error': str(response)}
+        return err
+
     #scraping the 1st 3 numbers: Cases, deaths and recovered
     head = Soup.select("tr[class='ms-rteTableHeaderRow-6'] th")
 

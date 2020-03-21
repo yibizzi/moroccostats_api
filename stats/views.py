@@ -6,16 +6,25 @@ from django.core.cache import cache
 from .scraper import *
 import threading
 
+
 '''
     We scrap results every 1800seconds since they are not updated every second.
 
 '''
+headers = {
+        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
+        'referrer': 'https://google.co.ma',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Pragma': 'no-cache',
+        'Connection':'close',
+    }
 
 COUNTRY_ERROR = {'error': 'The specified country is not valid.'}
 SERVER_ERROR = {'error': 'INTERNAL SERVER ERROR, try again later.'}
 
 def update_regions_morocco():
-    regions = get_regions_morocco()
+    regions = get_regions_morocco(headers)
     cache.set("morocco_regions", regions, 1800)
 
 def thread_update_regions():
@@ -103,15 +112,17 @@ def detail(request, country_id):
         return JsonResponse(SERVER_ERROR)
 
 def regions(request):
-    try:
-        
-        regions = cache.get('morocco_regions', False)        
-        if not(regions):
-            regions = get_regions_morocco()
+
+    try: 
+        regions = cache.get('morocco_regions', False)   
+             
+        if not(regions) or 'error' in list(regions.keys()):
+            regions = get_regions_morocco(headers)
             cache.set("morocco_regions", regions, 1800)
             
         
         return JsonResponse(regions)
     except Exception as err:
-        return JsonResponse({'a': SERVER_ERROR, 'error':str(err)})
+        SERVER_ERROR['error']= str(err)
+        return JsonResponse(SERVER_ERROR)
 
