@@ -130,7 +130,11 @@ def get_regions_morocco():
 
 
     url = 'http://www.covidmaroc.ma/'
-    response = requests.get(url , headers={'X-FRAME-OPTIONS': 'SAMEORIGIN','Connection':'close'})
+    response = requests.get(url , headers={
+        'X-FRAME-OPTIONS': 'SAMEORIGIN',
+        'Connection':'close',
+        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0'
+        })
     response=response.text
     soup = BeautifulSoup(response, "html.parser").select("table")
     try:
