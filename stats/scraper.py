@@ -123,7 +123,8 @@ def get_regions_morocco():
     response=response.text
     soup = BeautifulSoup(response, "html.parser").select("table")
     if len(soup)==0:
-        return {'erreur': 'empty table'}
+        error_log = '\n'.join(['text: '+str(len(response)), 'test: '+ str(BeautifulSoup(response, "html.parser").select("tr[class='ms-rteTableEvenRow-6']"))])
+        return {'erreur': error_log}
     Soup = soup[0]
     return Soup
     #scraping the 1st 3 numbers: Cases, deaths and recovered
