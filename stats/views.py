@@ -14,6 +14,15 @@ import threading
 COUNTRY_ERROR = {'error': 'The specified country is not valid.'}
 SERVER_ERROR = {'error': 'INTERNAL SERVER ERROR, try again later.'}
 
+def update_regions_morocco():
+    regions = get_regions_morocco()
+    cache.set("morocco_regions", regions, 1800)
+
+def thread_update_regions():
+    saver = threading.Thread(target=update_regions_morocco)
+    saver.start()
+
+    
 
 def save_countries_to_cache(table, countries):
     for country in countries:
@@ -65,8 +74,12 @@ def country_detail(request, name):
             #start another thread to save all countries
             thread_save_countries(table, countries)
             
+            if name == 'morocco':
+                thread_update_regions()
+                
             response = table[name]
             return JsonResponse(response)
+            
     
     except KeyError as err:
         return JsonResponse(COUNTRY_ERROR)
@@ -88,3 +101,17 @@ def detail(request, country_id):
         return JsonResponse(COUNTRY_ERROR)
     except Exception as err:
         return JsonResponse(SERVER_ERROR)
+
+def regions(request):
+    try:
+        
+        regions = cache.get('morocco_regions', False)        
+        if not(regions):
+            regions = get_regions_morocco()
+            cache.set("morocco_regions", regions, 1800)
+            
+        
+        return JsonResponse(regions)
+    except Exception as err:
+        return JsonResponse({'a': SERVER_ERROR, 'error':str(err)})
+

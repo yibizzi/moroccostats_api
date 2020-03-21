@@ -7,5 +7,7 @@ urlpatterns = [
 
      path('coronavirus/countries/', views.index, name='countries'),
      
-     path('coronavirus/countries/<slug:name>/', views.country_detail, name='detail_by_name')
+     path('coronavirus/countries/<slug:name>/', views.country_detail, name='detail_by_name'),
+     
+     path('coronavirus/countries/morocco/regions', views.regions, name='morocco_regions')
 ]

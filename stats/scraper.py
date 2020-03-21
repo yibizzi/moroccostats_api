@@ -2,6 +2,7 @@ import requests
 import urllib.request
 from bs4 import BeautifulSoup
 from time import time
+import re
 
 Soup = ''
 
@@ -113,3 +114,29 @@ def get_table():
 
         table[columns[0].lower().replace(':','')] = {column_heads[head[j]]:columns[j] for j in range(len(columns))}
     return table
+
+
+def get_regions_morocco():
+
+    url = 'http://www.covidmaroc.ma/'
+    response = requests.get(url , headers={'Connection':'close'})
+    response=response.text
+    soup = BeautifulSoup(response, "html.parser")
+    Soup = soup.select("table")[0]
+    #scraping the 1st 3 numbers: Cases, deaths and recovered
+    head = Soup.select("tr[class='ms-rteTableHeaderRow-6'] th")
+
+    head = [re.sub('[^A-Za-z0-9]+', '', i.text) for i  in head] 
+
+    rows = Soup.select("tr[class='ms-rteTableOddRow-6']") + Soup.select("tr[class='ms-rteTableEvenRow-6']")
+    rows = rows[1:]
+
+    table = dict()
+    for i in range(len(rows)):
+        region_row = rows[i]
+        region_name, region_count =  re.sub('[^A-Za-z0-9]+', '',region_row.select("th h2")[0].text) , re.sub('[^A-Za-z0-9]+', '', region_row.select("td h2")[0].text.split('\\')[0])
+        
+        if region_name!='':
+            table[region_name] = region_count
+    return table
+    
