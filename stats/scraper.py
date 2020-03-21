@@ -125,7 +125,7 @@ def get_regions_morocco():
     response = requests.get(url , headers={
         'X-FRAME-OPTIONS': 'SAMEORIGIN',
         'Connection':'close',
-        'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0'
+        'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
         })
     
     print('headers: \n' + str(response.headers))
