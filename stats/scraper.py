@@ -3,8 +3,6 @@ import urllib.request
 from bs4 import BeautifulSoup
 from time import time
 import re
-import logging
-import http.client as http_client
 
 Soup = ''
 
@@ -120,12 +118,6 @@ def get_table():
 
 def get_regions_morocco():
     
-    http_client.HTTPConnection.debuglevel = 1
-    logging.basicConfig()
-    logging.getLogger().setLevel(logging.DEBUG)
-    requests_log = logging.getLogger("requests.packages.urllib3")
-    requests_log.setLevel(logging.DEBUG)
-    requests_log.propagate = True
 
 
 
@@ -135,6 +127,8 @@ def get_regions_morocco():
         'Connection':'close',
         'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0'
         })
+    
+    print('headers: \n' + str(response.headers))
     response=response.text
     soup = BeautifulSoup(response, "html.parser").select("table")
     try:
