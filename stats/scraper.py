@@ -133,7 +133,10 @@ def get_regions_morocco():
     response = requests.get(url , headers={'X-FRAME-OPTIONS': 'SAMEORIGIN','Connection':'close'})
     response=response.text
     soup = BeautifulSoup(response, "html.parser").select("table")
-    Soup = soup[0]
+    try:
+        Soup = soup[0]
+    except:
+        return {'error': str(soup)}
     #scraping the 1st 3 numbers: Cases, deaths and recovered
     head = Soup.select("tr[class='ms-rteTableHeaderRow-6'] th")
 
