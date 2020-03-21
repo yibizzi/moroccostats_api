@@ -3,6 +3,8 @@ import urllib.request
 from bs4 import BeautifulSoup
 from time import time
 import re
+import logging
+import http.client as http_client
 
 Soup = ''
 
@@ -112,22 +114,26 @@ def get_table():
         columns = [i.text.strip() or '0' for i in country_row.select('td')]
 
 
-        table[columns[0].lower().replace(':','')] = {column_heads[head[j]]:columns[j] for j in range(len(columns))}
+        table[columns[0].lower().replace(':','').replace(' ','').replace('%20','')] = {column_heads[head[j]]:columns[j] for j in range(len(columns))}
     return table
 
 
 def get_regions_morocco():
+    
+    http_client.HTTPConnection.debuglevel = 1
+    logging.basicConfig()
+    logging.getLogger().setLevel(logging.DEBUG)
+    requests_log = logging.getLogger("requests.packages.urllib3")
+    requests_log.setLevel(logging.DEBUG)
+    requests_log.propagate = True
+
+
 
     url = 'http://www.covidmaroc.ma/'
-    response = requests.get(url , headers={'Connection':'close'})
+    response = requests.get(url , headers={'X-FRAME-OPTIONS': 'SAMEORIGIN','Connection':'close'})
     response=response.text
     soup = BeautifulSoup(response, "html.parser").select("table")
-    if len(soup)==0:
-        #error_log = '\n'.join(['text: '+str(len(response)), 'test: '+ str(BeautifulSoup(response, "html.parser").select("tr[class='ms-rteTableEvenRow-6']"))])
-         
-        return {'erreur': response}
     Soup = soup[0]
-    return Soup
     #scraping the 1st 3 numbers: Cases, deaths and recovered
     head = Soup.select("tr[class='ms-rteTableHeaderRow-6'] th")
 

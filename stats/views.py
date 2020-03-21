@@ -26,7 +26,7 @@ def thread_update_regions():
 
 def save_countries_to_cache(table, countries):
     for country in countries:
-        cache.set("cached"+country.replace(' ',''), table[country], 1800)
+        cache.set("cached"+country, table[country], 1800)
 
 def thread_save_countries(table, countries):
     saver = threading.Thread(target=save_countries_to_cache, args=(table, countries))
@@ -52,7 +52,7 @@ def index(request):
 
 def country_detail(request, name):
     try:
-        name = str(name).lower()
+        name = str(name).lower().replace(' ','').replace('%20','')
         #IF list of countries in cache, check if name is valide
         countries = cache.get('countries', False)        
         if countries != False and name not in countries:
@@ -60,7 +60,7 @@ def country_detail(request, name):
 
         #if list not in cache, we check directly for name in cache
         #if response already in cache, return it
-        response = cache.get('cached'+str(name).replace(' ','') , False)
+        response = cache.get('cached'+str(name), False)
         if response != False:
             return JsonResponse(response)
         
@@ -76,7 +76,7 @@ def country_detail(request, name):
             
             if name == 'morocco':
                 thread_update_regions()
-                
+
             response = table[name]
             return JsonResponse(response)
             
