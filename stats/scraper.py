@@ -121,8 +121,11 @@ def get_regions_morocco():
     url = 'http://www.covidmaroc.ma/'
     response = requests.get(url , headers={'Connection':'close'})
     response=response.text
-    soup = BeautifulSoup(response, "html.parser")
-    Soup = soup.select("table")[0]
+    soup = BeautifulSoup(response, "html.parser").select("table")
+    if len(soup)==0:
+        return {'erreur': 'empty table'}
+    Soup = soup[0]
+    return Soup
     #scraping the 1st 3 numbers: Cases, deaths and recovered
     head = Soup.select("tr[class='ms-rteTableHeaderRow-6'] th")
 
