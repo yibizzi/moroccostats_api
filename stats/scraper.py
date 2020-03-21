@@ -124,12 +124,12 @@ def get_regions_morocco(heads):
     url = 'http://www.covidmaroc.ma/'
     
     response = requests.get(url , headers=heads)
-    print('headers: \n' + str(response.headers))
+    print('headers: \n' + str(response.request.headers))
     sys.stdout.flush()
     
     response=response.text
     err =  {'error': str(response)}
-    
+
     soup = BeautifulSoup(response, "html.parser").select("table")
     try:
         Soup = soup[0]
