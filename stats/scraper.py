@@ -136,7 +136,7 @@ def get_regions_morocco():
     try:
         Soup = soup[0]
     except:
-        return {'error': str(soup)}
+        return {'error': str(response)}
     #scraping the 1st 3 numbers: Cases, deaths and recovered
     head = Soup.select("tr[class='ms-rteTableHeaderRow-6'] th")
 
