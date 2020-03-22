@@ -146,11 +146,9 @@ def get_regions_morocco(heads):
     table = dict()
     for i in range(len(rows)):
         region_row = rows[i]
-        try:
-            region_name, region_count =  re.sub('[^A-Za-z0-9]+', '',region_row.select("th h2")[0].text) , re.sub('[^A-Za-z0-9]+', '', region_row.select("td h2")[0].text.split('\\')[0])
-        except:
-            err['error']= 'here'
-            return err
+        
+        region_name, region_count =  re.sub('[^A-Za-z0-9]+', '',region_row.select("th h2")[0].text) , re.sub('[^A-Za-z0-9]+', '', region_row.select("td h2")[0].text.split('\\')[0])
+        
         if region_name!='':
             table[region_name] = region_count
     return table
