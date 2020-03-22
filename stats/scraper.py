@@ -130,9 +130,9 @@ def get_regions_morocco(heads):
     response=response.text
     err =  {'error': str(response)}
 
-    soup = BeautifulSoup(response, "html.parser").select("table")
+    soup = BeautifulSoup(response, "html.parser").select("table[class='ms-rteTable-6'")
     try:
-        Soup = soup[0]
+        Soup = soup[1]
     except:
         return err
 
@@ -146,8 +146,11 @@ def get_regions_morocco(heads):
     table = dict()
     for i in range(len(rows)):
         region_row = rows[i]
-        region_name, region_count =  re.sub('[^A-Za-z0-9]+', '',region_row.select("th h2")[0].text) , re.sub('[^A-Za-z0-9]+', '', region_row.select("td h2")[0].text.split('\\')[0])
-        
+        try:
+            region_name, region_count =  re.sub('[^A-Za-z0-9]+', '',region_row.select("th h2")[0].text) , re.sub('[^A-Za-z0-9]+', '', region_row.select("td h2")[0].text.split('\\')[0])
+        except:
+            err['error']= 'here'
+            return err
         if region_name!='':
             table[region_name] = region_count
     return table
