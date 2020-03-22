@@ -132,7 +132,7 @@ def get_regions_morocco(heads):
 
     soup = BeautifulSoup(response, "html.parser").select("table[class='ms-rteTable-6']") 
     try:
-        Soup = soup[1]
+        Soup = soup[0]
     except:
         return err
 
