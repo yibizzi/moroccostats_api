@@ -142,7 +142,6 @@ def get_regions_morocco(heads):
     head = [re.sub('[^A-Za-z0-9]+', '', i.text) for i  in head] 
 
     rows = Soup.select("tr[class='ms-rteTableOddRow-6']") + Soup.select("tr[class='ms-rteTableEvenRow-6']")
-    rows = rows[1:]
 
     table = dict()
     for i in range(len(rows)):
