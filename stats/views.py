@@ -41,7 +41,7 @@ def thread_save_countries(table, countries):
 
 
 # Return list of available countries
-def index(request):
+def countries(request):
     try:
         #get table of all countries from cache, or scrap it
         countries = cache.get('countries', False)        
@@ -124,3 +124,5 @@ def regions(request):
         SERVER_ERROR['error']= str(err)
         return JsonResponse(SERVER_ERROR)
 
+def index(request):
+    return render(request, 'stats/index.html')
