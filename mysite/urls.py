@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from stats.views import index
 
 urlpatterns = [
-    path('stats/', include('stats.urls'))
+    path('stats/', include('stats.urls')),
+    path('', index , name='indexpage')
 ]
