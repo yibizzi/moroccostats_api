@@ -93,22 +93,6 @@ def country_detail(request, name):
     except Exception as err:
         return JsonResponse({'Internal Server Error': str(err)})
 
-def detail(request, country_id):
-    try:
-        name = countries_ids[country_id].lower()
-        response = cache.get('cached_special_'+name.replace(' ',''), False)
-
-        if not(response):
-            response = get_data(country_id)
-            cache.set("cached_special_"+name.replace(' ',''), response, 60)
-
-        
-        return JsonResponse(response)
-    except KeyError as err:
-        return JsonResponse(COUNTRY_ERROR)
-    except Exception as err:
-        return JsonResponse(SERVER_ERROR)
-
 def regions(request):
 
     try: 
