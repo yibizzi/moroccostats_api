@@ -51,8 +51,8 @@ def get_table():
         try:
             table[columns[0].lower().replace(':','').replace(' ','').replace('%20','')] = {column_heads[head[j]]:columns[j] for j in range(len(columns))}
         except Exception as err:
-            print("heads exception -->"+str(err))
-            raise err
+            print("heads exception --> "+str(err))
+            
     return table
 
 
