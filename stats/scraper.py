@@ -14,7 +14,8 @@ column_heads = {"Country Other": "country",
             "ActiveCases": "activecases",
             "Serious Critical": "seriouscases",
             "Tot\u00a0Cases/1M pop": "total_per_one_million",
-            'Tot\xa0Deaths/1M pop':'deaths_per_million'
+            'Deaths/1M pop':'deaths_per_million',
+            '1stcase':'1stcase'
 }
 
 attributes = [
@@ -47,11 +48,16 @@ def get_table():
     for i in range(len(rows)):
         country_row = rows[i]
         columns = [i.text.strip() or '0' for i in country_row.select('td')]
+        
+        element = dict()
 
-        try:
-            table[columns[0].lower().replace(':','').replace(' ','').replace('%20','')] = {column_heads[head[j]]:columns[j] for j in range(len(columns))}
-        except Exception as err:
-            print("heads exception --> "+str(err))
+        for j in range(len(columns)):
+            try:
+                element[ column_heads[head[j]] ] = columns[j].replace(',','')
+            except Exception as err:
+                print("heads exception --> "+str(err))
+        
+        table[columns[0].lower().replace(':','').replace(' ','').replace('%20','')]  = element
             
     return table
 
