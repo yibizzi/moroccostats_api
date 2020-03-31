@@ -55,7 +55,11 @@ def get_table():
             try:
                 element[ column_heads[head[j]] ] = columns[j].replace(',','')
             except Exception as err:
-                print("heads exception --> "+str(err))
+                try:
+                    element[ head[j] ] = columns[j].replace(',','')
+                except Exception as e:
+                    print("Exception occured: " + str(e) )
+
         
         table[columns[0].lower().replace(':','').replace(' ','').replace('%20','')]  = element
             
@@ -68,8 +72,6 @@ def get_regions_morocco(heads):
     url = 'http://www.covidmaroc.ma/'
     
     response = requests.get(url , headers=heads)
-    print('headers: \n' + str(response.request.headers))
-    sys.stdout.flush()
     
     response=response.text
     err =  {'error': str(response)}
