@@ -61,7 +61,7 @@ def get_table():
                     print("Exception occured: " + str(e) )
 
         
-        table[columns[0].lower().replace(':','').replace(' ','').replace('%20','')]  = element
+        table[columns[1].lower().replace(':','').replace(' ','').replace('%20','')]  = element
             
     return table
 
